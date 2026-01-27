@@ -51,17 +51,13 @@ function App() {
         {/* VIEW: SANCTUARY (Asymmetric Split) */}
         {viewMode === 'SANCTUARY' && (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-150px)]">
-            {/* Main Reading Area (Left) */}
-            <div className="lg:col-span-3 h-full">
-              <SessionArchive />
-            </div>
 
-            {/* Visual Companion (Right) */}
-            <div className="lg:col-span-1 h-full flex flex-col gap-4">
-              <div className="flex-1 min-h-0">
+            {/* Visual Companion (Right on Desktop, Top on Mobile) */}
+            <div className="lg:col-span-1 h-full flex flex-col gap-4 order-1 lg:order-2">
+              <div className="flex-1 min-h-0 min-h-[300px] lg:min-h-0">
                 <CCTVGallery />
               </div>
-              <div className="bg-minato-panel border border-minato-dim/30 rounded-lg p-4 h-auto">
+              <div className="bg-minato-panel border border-minato-dim/30 rounded-lg p-4 h-auto hidden lg:block">
                 <h3 className="text-xs font-bold text-minato-dim mb-2 flex items-center gap-2">
                   <Activity className="w-3 h-3" />
                   LIVE STATUS
@@ -73,6 +69,12 @@ function App() {
                 </div>
               </div>
             </div>
+
+            {/* Main Reading Area (Left on Desktop, Bottom on Mobile) */}
+            <div className="lg:col-span-3 h-full order-2 lg:order-1">
+              <SessionArchive />
+            </div>
+
           </div>
         )}
 
