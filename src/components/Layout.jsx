@@ -1,11 +1,51 @@
 import React from 'react';
-import { Terminal, Heart, Save, Settings, Activity } from 'lucide-react';
+import { Terminal, Heart, Save, Settings, Activity, Menu, X } from 'lucide-react';
 
 const Layout = ({ children }) => {
+    const [isSidebarOpen, setSidebarOpen] = React.useState(false);
+
     return (
-        <div className="flex h-screen w-screen bg-minato-dark text-minato-text overflow-hidden selection:bg-minato-accent selection:text-minato-dark font-mono">
+        <div className="flex h-screen w-screen bg-minato-dark text-minato-text overflow-hidden selection:bg-minato-accent selection:text-minato-dark font-mono relative">
+
+            {/* Mobile Header Toggle (Visible only on mobile) */}
+            <div className="lg:hidden fixed top-0 left-0 w-full h-14 bg-minato-panel/90 backdrop-blur border-b border-minato-dim/30 z-30 flex items-center px-4 justify-between">
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setSidebarOpen(true)}
+                        className="p-2 -ml-2 text-minato-accent hover:bg-minato-dim/20 rounded-md transition-colors"
+                    >
+                        <Menu className="w-6 h-6" />
+                    </button>
+                    <span className="font-bold tracking-widest text-minato-text">MINATO</span>
+                </div>
+                <div className="text-[10px] text-minato-dim animate-pulse">ONLINE</div>
+            </div>
+
+            {/* Mobile Overlay Backdrop */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black/80 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+                    onClick={() => setSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
-            <aside className="w-72 border-r border-minato-dim/30 bg-minato-panel flex flex-col relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.5)]">
+            <aside className={`
+                fixed inset-y-0 left-0 z-50 w-72 bg-minato-panel border-r border-minato-dim/30 
+                flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out
+                lg:relative lg:translate-x-0
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
+                {/* Mobile Close Button */}
+                <div className="lg:hidden absolute top-4 right-4 z-50">
+                    <button
+                        onClick={() => setSidebarOpen(false)}
+                        className="p-1 text-minato-dim hover:text-minato-error transition-colors"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
+                </div>
+
                 {/* Header */}
                 <div className="p-6 border-b border-minato-dim/30 flex items-center space-x-4 bg-black/20">
                     <div className="relative group cursor-help">
@@ -57,7 +97,7 @@ const Layout = ({ children }) => {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 relative overflow-auto scroll-smooth">
+            <main className="flex-1 relative overflow-auto scroll-smooth pt-14 lg:pt-0">
                 {/* Abstract Background */}
                 <div className="fixed inset-0 pointer-events-none opacity-20"
                     style={{
@@ -70,7 +110,7 @@ const Layout = ({ children }) => {
                 {/* Scanline Effect */}
                 <div className="fixed inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-50 bg-[length:100%_2px,3px_100%] opacity-20" style={{ backgroundSize: '100% 2px, 3px 100%' }} />
 
-                <div className="relative z-10 p-8 min-h-full">
+                <div className="relative z-10 p-4 lg:p-8 min-h-full">
                     {children}
                 </div>
             </main>

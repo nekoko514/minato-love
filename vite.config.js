@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // Enable relative paths for flexible deployment (e.g., GitHub Pages)
-  base: './',
+  base: '/minato-love/',
 })
