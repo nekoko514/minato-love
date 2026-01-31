@@ -1,11 +1,16 @@
 import React from 'react';
-import { Terminal, Heart, Save, Settings, Activity, Menu, X } from 'lucide-react';
+import { Terminal, Heart, Save, Settings, Activity, Menu, X, MessageSquare } from 'lucide-react';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, currentMode, setMode }) => {
     const [isSidebarOpen, setSidebarOpen] = React.useState(false);
 
+    const setNavMode = (mode) => {
+        setMode(mode);
+        setSidebarOpen(false); // Close mobile menu on select
+    };
+
     return (
-        <div className="flex h-screen w-screen bg-minato-dark text-minato-text overflow-hidden selection:bg-minato-accent selection:text-minato-dark font-mono relative">
+        <div className="flex h-[100dvh] w-full max-w-[100vw] bg-minato-dark text-minato-text overflow-hidden selection:bg-minato-accent selection:text-minato-dark font-mono relative">
 
             {/* Mobile Header Toggle (Visible only on mobile) */}
             <div className="lg:hidden fixed top-0 left-0 w-full h-14 bg-minato-panel/90 backdrop-blur border-b border-minato-dim/30 z-30 flex items-center px-4 justify-between">
@@ -66,14 +71,19 @@ const Layout = ({ children }) => {
                         Modules
                     </div>
 
-                    <MenuButton icon={Heart} label="Sanctuary" active color="text-neneko-pink" />
-                    <MenuButton icon={Save} label="Archives" />
-                    <MenuButton icon={Activity} label="Vitals" />
+                    <MenuButton icon={Heart} label="Sanctuary" active={currentMode === 'SANCTUARY'} onClick={() => setNavMode('SANCTUARY')} color="text-neneko-pink" />
+                    <MenuButton icon={Save} label="Archives" active={currentMode === 'ARCHIVES'} onClick={() => setNavMode('ARCHIVES')} />
+
+                    <div className="mt-8 px-3 pb-2 text-xs text-minato-dim uppercase tracking-widest border-b border-minato-dim/10 mb-2">
+                        Interaction
+                    </div>
+                    <MenuButton icon={Activity} label="Vitals" active={currentMode === 'VITALS'} onClick={() => setNavMode('VITALS')} color="text-minato-accent" />
+                    <MenuButton icon={MessageSquare} label="Direct Link" active={currentMode === 'LINK'} onClick={() => setNavMode('LINK')} color="text-blue-400" />
 
                     <div className="mt-8 px-3 pb-2 text-xs text-minato-dim uppercase tracking-widest border-b border-minato-dim/10 mb-2">
                         System
                     </div>
-                    <MenuButton icon={Settings} label="Config" />
+                    <MenuButton icon={Settings} label="Config" active={currentMode === 'CONFIG'} onClick={() => setNavMode('CONFIG')} />
                 </nav>
 
                 {/* Footer */}
@@ -97,7 +107,7 @@ const Layout = ({ children }) => {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 relative overflow-auto scroll-smooth pt-14 lg:pt-0">
+            <main className="flex-1 relative overflow-y-scroll overflow-x-hidden scroll-smooth pt-14 lg:pt-0 overscroll-y-contain w-full">
                 {/* Abstract Background */}
                 <div className="fixed inset-0 pointer-events-none opacity-20"
                     style={{
@@ -118,8 +128,9 @@ const Layout = ({ children }) => {
     );
 };
 
-const MenuButton = ({ icon: Icon, label, active = false, color = "text-minato-dim" }) => (
+const MenuButton = ({ icon: Icon, label, active = false, color = "text-minato-dim", onClick }) => (
     <button
+        onClick={onClick}
         className={`w-full group flex items-center justify-between p-3 rounded border border-transparent transition-all duration-300
       ${active ? 'bg-minato-dim/10 border-minato-dim/30 text-minato-text' : 'hover:bg-minato-dim/10 hover:border-minato-dim/20 text-gray-500'}
     `}
